@@ -26,7 +26,6 @@ $(TARGET_DYNAMIC): $(DYNAMIC_LIB) obj/main.o
 
 clean:
 	rm -f obj/*.o $(TARGET_STATIC) $(TARGET_DYNAMIC) $(STATIC_LIB) $(DYNAMIC_LIB)
-
 install:
 	sudo cp bin/client_static /usr/local/bin/client
 	sudo cp man/man1/*.1 /usr/local/share/man/man1/
