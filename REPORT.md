@@ -1,35 +1,25 @@
-Q1: Compare the Makefile from Part 2 and Part 3. What are the key differences in the variables and rules that enable the creation of a static library?
+Q1: What is Position-Independent Code (-fPIC) and why is it a fundamental requirement for creating shared libraries?
 
 Answer:
 
-Part 2 Makefile: Directly compiled all .c files and linked them together into the final executable.
+-fPIC makes code that can run independent of memory address.
 
-Part 3 Makefile:
+Needed because shared libraries can be loaded at any memory location by the OS.
 
-Separates utility functions into object files.
-
-Creates a static library (lib/libmyutils.a) using ar rcs.
-
-Links main.c with this library instead of compiling everything together.
-
-Key difference: Part 3 adds rules for building and using a static library.
-
-Q2: What is the purpose of the ar command? Why is ranlib often used immediately after it?
+Q2: Explain the difference in file size between your static and dynamic clients. Why does this difference exist?
 
 Answer:
 
-ar is used to bundle multiple object files into one static library (.a file).
+Static client is larger because it contains a full copy of all library functions inside the executable.
 
-ranlib creates an index inside the library so the linker can quickly find symbols.
+Dynamic client is smaller because it only contains references; the code stays in the .so file.
 
-On modern systems, ar rcs already updates the index, so ranlib is not always required.
-
-Q3: When you run nm on your client_static executable, are the symbols for functions like mystrlen present? What does this tell you about how static linking works?
+Q3: What is the LD_LIBRARY_PATH environment variable? Why was it necessary to set it for your program to run, and what does this tell you about the responsibilities of the operating system's dynamic loader?
 
 Answer:
 
-No, the function symbols (like mystrlen) are not visible in the executable.
+LD_LIBRARY_PATH tells the system where to look for shared libraries at runtime.
 
-This means static linking copies the function code directly into the executable.
+Without it, the loader cannot find libmyutils.so.
 
-The executable contains the actual machine code, not separate references.
+This shows that the dynamic loader is responsible for locating and loading shared libraries before a program runs.
