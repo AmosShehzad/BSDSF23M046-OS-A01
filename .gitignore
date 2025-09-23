@@ -1,0 +1,7 @@
+bin/
+obj/
+lib/*.a
+lib/*.so
+*~
+*.swp
+.vscode/
