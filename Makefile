@@ -28,8 +28,6 @@ clean:
 	rm -f obj/*.o $(TARGET_STATIC) $(TARGET_DYNAMIC) $(STATIC_LIB) $(DYNAMIC_LIB)
 
 install:
-	@echo "Installing client and man pages (requires sudo)..."
-	sudo install -Dm755 bin/client /usr/local/bin/client
-	sudo install -Dm644 man/man1/*.1 /usr/local/share/man/man1/
-	@if command -v mandb >/dev/null 2>&1; then sudo mandb -q; fi
-
+	sudo cp bin/client_static /usr/local/bin/client
+	sudo cp man/man1/*.1 /usr/local/share/man/man1/
+	sudo mandb
