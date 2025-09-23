@@ -1,32 +1,28 @@
 CC = gcc
-CFLAGS = -Iinclude -Wall -g
+CFLAGS = -Iinclude -Wall -g -fPIC
+SRC = $(wildcard src/*.c)
+OBJ = $(patsubst src/%.c,obj/%.o,$(SRC))
+STATIC_LIB = lib/libmyutils.a
+DYNAMIC_LIB = lib/libmyutils.so
+TARGET_STATIC = bin/client_static
+TARGET_DYNAMIC = bin/client_dynamic
 
-SRC = src/main.c
-OBJ_MAIN = obj/main.o
+all: $(TARGET_STATIC) $(TARGET_DYNAMIC)
 
-UTIL_SRC = src/mystrfunctions.c src/myfilefunctions.c
-UTIL_OBJ = obj/mystrfunctions.o obj/myfilefunctions.o
-LIB = lib/libmyutils.a
-
-TARGET = bin/client_static
-
-all: $(TARGET)
-
-# Compile main
-obj/main.o: src/main.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Compile utils into object files
 obj/%.o: src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Create static library
-$(LIB): $(UTIL_OBJ)
-	ar rcs $(LIB) $(UTIL_OBJ)
+$(STATIC_LIB): obj/mystrfunctions.o obj/myfilefunctions.o
+	ar rcs $(STATIC_LIB) $^
 
-# Link main with library
-$(TARGET): $(OBJ_MAIN) $(LIB)
-	$(CC) $(OBJ_MAIN) -Llib -lmyutils -o $(TARGET)
+$(TARGET_STATIC): $(STATIC_LIB) obj/main.o
+	$(CC) obj/main.o -Llib -lmyutils -o $(TARGET_STATIC)
+
+$(DYNAMIC_LIB): obj/mystrfunctions.o obj/myfilefunctions.o
+	$(CC) -shared -o $(DYNAMIC_LIB) $^
+
+$(TARGET_DYNAMIC): $(DYNAMIC_LIB) obj/main.o
+	$(CC) obj/main.o -Llib -lmyutils -o $(TARGET_DYNAMIC)
 
 clean:
-	rm -f obj/*.o $(LIB) $(TARGET)
+	rm -f obj/*.o $(TARGET_STATIC) $(TARGET_DYNAMIC) $(STATIC_LIB) $(DYNAMIC_LIB)

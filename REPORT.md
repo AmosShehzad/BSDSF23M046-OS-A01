@@ -24,7 +24,8 @@ ranlib creates an index inside the library so the linker can quickly find symbol
 
 On modern systems, ar rcs already updates the index, so ranlib is not always required.
 
-Q3: When you run nm on your client_static executable, are the symbols for functions like mystrlen present? What does this tell you about how static linking works?
+Q3: When you run nm on your client_static executable, are the symbols for functions like mystrlen present? What does this tell you about how 
+static linking works?
 
 Answer:
 
@@ -33,3 +34,4 @@ No, the function symbols (like mystrlen) are not visible in the executable.
 This means static linking copies the function code directly into the executable.
 
 The executable contains the actual machine code, not separate references.
+
